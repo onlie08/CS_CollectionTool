@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/edit_background"
+    android:padding="1dp"
+    >
+
+    <TextView
+        android:id="@+id/tv_phone_num2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="组/湾"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_input_group"
+        app:layout_constraintStart_toStartOf="@+id/tv_phone_num4"
+        app:layout_constraintTop_toTopOf="@+id/edit_input_group" />
+
+    <TextView
+        android:id="@+id/tv_phone_num10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:text="信息录入"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_delect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/selector_list_clicked"
+        android:clickable="true"
+        android:padding="4dp"
+        android:text="删除该条"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_phone_num10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_phone_num10" />
+
+    <EditText
+        android:id="@+id/edit_input_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edit_background"
+        android:ems="10"
+        android:hint="请输入组/湾"
+        android:padding="8dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/edit_input_plate"
+        app:layout_constraintStart_toStartOf="@+id/edit_input_plate"
+        app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+    <EditText
+        android:id="@+id/edit_input_door"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_background"
+        android:ems="10"
+        android:hint="请输入现有户数"
+        android:padding="8dp"
+        android:textSize="14sp"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/edit_input_plate"
+        app:layout_constraintStart_toStartOf="@+id/edit_input_plate"
+        app:layout_constraintTop_toBottomOf="@+id/edit_input_group" />
+
+    <EditText
+        android:id="@+id/edit_input_plate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/edit_background"
+        android:ems="10"
+        android:hint="请输入申请门牌数量"
+        android:padding="8dp"
+        android:textSize="14sp"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_phone_num4"
+        app:layout_constraintTop_toBottomOf="@+id/edit_input_door" />
+
+    <EditText
+        android:id="@+id/edit_input_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_background"
+        android:ems="6"
+        android:hint="请输入备注"
+        android:padding="8dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/edit_input_plate"
+        app:layout_constraintStart_toStartOf="@+id/edit_input_plate"
+        app:layout_constraintTop_toBottomOf="@+id/edit_input_plate" />
+
+    <TextView
+        android:id="@+id/tv_phone_num3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="现有户数"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_input_door"
+        app:layout_constraintStart_toStartOf="@+id/tv_phone_num4"
+        app:layout_constraintTop_toTopOf="@+id/edit_input_door" />
+
+    <TextView
+        android:id="@+id/tv_phone_num4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="申请门牌数量"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_input_plate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edit_input_plate" />
+
+    <TextView
+        android:id="@+id/tv_phone_num5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="备注"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_input_info"
+        app:layout_constraintStart_toStartOf="@+id/tv_phone_num4"
+        app:layout_constraintTop_toTopOf="@+id/edit_input_info" />
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="保存"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/view7" />
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="取消"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_save"
+        app:layout_constraintEnd_toStartOf="@+id/btn_save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_input_info"
+        app:layout_constraintTop_toTopOf="@+id/btn_save"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <View
+        android:id="@+id/view6"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/btnPressed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_phone_num10" />
+
+    <View
+        android:id="@+id/view7"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/btnPressed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_input_info" />
+</android.support.constraint.ConstraintLayout>
