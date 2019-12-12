@@ -3,6 +3,7 @@ package com.ch.cs_collectiontool.bean;
 import java.util.List;
 
 public class Village {
+    private int id;
     private int uid;
     private String province;
     private String telephone;
@@ -92,5 +93,13 @@ public class Village {
 
     public void setGroups(List<Group> groups) {
         this.groups = groups;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -1,15 +1,20 @@
 package com.ch.cs_collectiontool.bean;
 
-public class Room {
-    private String roomNo;
+import java.io.Serializable;
+
+public class Room implements Serializable {
+    private int roomNo;
     private String ownerName;
     private String remark;
+    private int gid;
+    private String belongGroup;
+    private boolean reserve;
 
-    public String getRoomNo() {
+    public int getRoomNo() {
         return roomNo;
     }
 
-    public void setRoomNo(String roomNo) {
+    public void setRoomNo(int roomNo) {
         this.roomNo = roomNo;
     }
 
@@ -27,5 +32,29 @@ public class Room {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public int getGid() {
+        return gid;
+    }
+
+    public void setGid(int gid) {
+        this.gid = gid;
+    }
+
+    public String getBelongGroup() {
+        return belongGroup;
+    }
+
+    public void setBelongGroup(String belongGroup) {
+        this.belongGroup = belongGroup;
+    }
+
+    public boolean isReserve() {
+        return reserve;
+    }
+
+    public void setReserve(boolean reserve) {
+        this.reserve = reserve;
     }
 }

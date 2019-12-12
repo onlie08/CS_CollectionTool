@@ -1,9 +1,13 @@
 package com.ch.cs_collectiontool;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Process;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -26,7 +30,6 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -48,8 +51,8 @@ import okhttp3.RequestBody;
 
 public class LoginActivity extends AppCompatActivity {
     ImmersionBar mImmersionBar;
-    @BindView(R.id.img_close)
-    ImageView imgClose;
+    @BindView(R.id.tv_close)
+    TextView tvClose;
     @BindView(R.id.edit_phone)
     EditText editPhone;
     @BindView(R.id.btn_login)
@@ -63,6 +66,12 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.constraint_login)
     ConstraintLayout constraintLogin;
 
+    private static String[] PERMISSIONS_REQUEST = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
     /**
      * status 代表信息采集的进度，0：未注册，1：采集村，2：采集组，3：采集户
      */
@@ -92,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         String collectInfo = (String) AppPreferences.instance().get("telephone", "");
         if (TextUtils.isEmpty(collectInfo)) {
             status = 0;
+            requestPermission();
         } else {
             getInfo();
         }
@@ -110,14 +120,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.img_close, R.id.btn_login})
+    @OnClick({R.id.tv_close, R.id.btn_login})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.img_close:
+            case R.id.tv_close:
                 finish();
                 break;
             case R.id.btn_login:
-                requesetLogin();
+//                requesetLogin();
                 if (TextUtils.isEmpty(editPhone.getEditableText().toString())) {
                     Toast.makeText(getApplicationContext(), "请输入手机号", Toast.LENGTH_LONG).show();
                     return;
@@ -153,8 +163,10 @@ public class LoginActivity extends AppCompatActivity {
                         if (value.getCode() != 0) {
                             Toast.makeText(LoginActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                         } else {
+                            Log.i("caohai",new Gson().toJson(value));
                             AppPreferences.instance().put("telephone",editPhone.getEditableText().toString().trim());
-                            startActivity(new Intent(getApplicationContext(), EnterInfoActivity.class));
+                            getInfo();
+//                            startActivity(new Intent(getApplicationContext(), EnterInfoActivity.class));
                         }
 
                         mDisposable.dispose();//注销
@@ -373,11 +385,42 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), EnterInfoActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(getApplicationContext(), UserCountActivity.class));
+                startActivity(new Intent(getApplicationContext(), GroupActivity.class));
                 break;
             case 3:
-                startActivity(new Intent(getApplicationContext(), UserCheckInActivity.class));
+                startActivity(new Intent(getApplicationContext(), GroupActivity.class));
                 break;
+        }
+        finish();
+    }
+
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (this.checkPermission(Manifest.permission.READ_PHONE_STATE, Process.myPid(), Process.myUid())
+                    != PackageManager.PERMISSION_GRANTED || this.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Process.myPid(), Process.myUid())
+                    != PackageManager.PERMISSION_GRANTED || this.checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, Process.myPid(), Process.myUid())
+                    != PackageManager.PERMISSION_GRANTED) {
+                this.requestPermissions(PERMISSIONS_REQUEST, 1);
+            } else {
+            }
+        } else {
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    Toast.makeText(this, "软件退出，运行权限被禁止", Toast.LENGTH_SHORT).show();
+                    Log.i("=======================", "权限" + permissions[i] + "申请失败");
+                    System.exit(0);
+                }
+            }
         }
     }
 }

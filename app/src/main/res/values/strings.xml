@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CS_CollectionTool</string>
+    <string name="app_name">长沙采集工具</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>

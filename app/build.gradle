@@ -37,6 +37,22 @@ android {
             signingConfig signingConfigs.config
         }
     }
+
+    sourceSets {
+        main {
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'   // aar目录
+        }
+    }
+    //忽略引用包中的错误
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -65,4 +81,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     //
     implementation 'com.google.code.gson:gson:2.8.3'
+
+    implementation files('libs/sfmap-mapsdk-V1.0-20191127.aar')
+    implementation files('libs/sfmap-locsdk-V1.0-20191127.aar')
 }

@@ -1,14 +1,17 @@
 package com.ch.cs_collectiontool.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Group {
+public class Group implements Serializable {
+    private int id;
     private String groupName;
-    private int gid;
+    private int vid;
     private int roomNum;
-    private int doorNum;
     private String remark;
     private List<Room> rooms;
+    private double lng;
+    private double lat;
 
     public String getGroupName() {
         return groupName;
@@ -26,20 +29,12 @@ public class Group {
         this.roomNum = roomNum;
     }
 
-    public int getDoorNum() {
-        return doorNum;
+    public int getVid() {
+        return vid;
     }
 
-    public int getGid() {
-        return gid;
-    }
-
-    public void setGid(int gid) {
-        this.gid = gid;
-    }
-
-    public void setDoorNum(int doorNum) {
-        this.doorNum = doorNum;
+    public void setVid(int vid) {
+        this.vid = vid;
     }
 
     public String getRemark() {
@@ -56,5 +51,29 @@ public class Group {
 
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 }
