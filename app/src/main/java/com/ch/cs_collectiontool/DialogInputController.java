@@ -2,6 +2,7 @@ package com.ch.cs_collectiontool;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -22,14 +23,14 @@ import com.ch.cs_collectiontool.bean.Room;
 import com.ch.cs_collectiontool.bean.SubRoom;
 import com.ch.cs_collectiontool.view.SubItemController;
 import com.google.gson.Gson;
-import com.sfmap.api.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PropertyResourceBundle;
 
 public class DialogInputController {
     private List<SubRoom> subRooms = new ArrayList<>();
+    private List<Room> allRooms = new ArrayList<>();
+    private List<Group> groups = new ArrayList<>();
     private String location;
     DialogGroupListener groupListener;
     public void setGroupListener(DialogGroupListener listener) {
@@ -38,6 +39,14 @@ public class DialogInputController {
 
     public void setLocation(String result) {
         location = result;
+    }
+
+    public void setAllRooms(List<Room> allRooms) {
+        this.allRooms = allRooms;
+    }
+
+    public void setAllGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     interface DialogGroupListener{
@@ -116,14 +125,33 @@ public class DialogInputController {
                     Toast.makeText(mContext,"请输入定位信息",Toast.LENGTH_LONG).show();
                     return;
                 }
+
+                boolean groupNameOk = true;
+                for(Group group1 : groups){
+                    if(null == group){
+                        if(group1.getGroupName().equals(edit_input_group.getEditableText().toString())){
+                            groupNameOk = false;
+                        }
+                    }else {
+                        if(group1.getGroupName().equals(edit_input_group.getEditableText().toString()) && group1.getId() != group.getId()){
+                            groupNameOk = false;
+                        }
+                    }
+                }
+                if(!groupNameOk){
+                    Toast.makeText(mContext,edit_input_group.getEditableText().toString()+"已存在，请检查",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 hideSoftKeyboard((Activity)mContext);
                 dialog.dismiss();
                 Group group1 = new Group();
                 group1.setGroupName(edit_input_group.getEditableText().toString());
                 group1.setRoomNum(Integer.parseInt(edit_input_plate.getEditableText().toString()));
                 if(null == location){
-                    group1.setLat(group.getLat());
-                    group1.setLng(group.getLng());
+                    if(null != group){
+                        group1.setLat(group.getLat());
+                        group1.setLng(group.getLng());
+                    }
                 }else {
                     String[] loc = location.split(",");
                     group1.setLat(Double.parseDouble(loc[0]));
@@ -142,16 +170,52 @@ public class DialogInputController {
         tv_delect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSoftKeyboard((Activity)mContext);
-                dialog.dismiss();
-                groupListener.delectItem();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                View alarm = ((Activity)mContext).getLayoutInflater().inflate(R.layout.dialog_alarm_layout,null);
+                builder.setView(alarm);
+                builder.setCancelable(true);
+
+                final Dialog dialog1 = builder.create();
+                dialog1.show();
+
+                TextView tv_alarm_info = alarm.findViewById(R.id.tv_alarm_info);
+                tv_alarm_info.setText("注意数据删除后无法恢复，是否确认删除？");
+                Button btn_report = alarm.findViewById(R.id.btn_report);
+                btn_report.setText("确认");
+                btn_report.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        hideSoftKeyboard((Activity)mContext);
+                        dialog.dismiss();
+                        groupListener.delectItem();
+
+                        dialog1.dismiss();
+                    }
+                });
+                Button btn_cancel = alarm.findViewById(R.id.btn_cancel);
+                btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog1.dismiss();
+                    }
+                });
+
+
             }
         });
 
         tv_choose_gps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((Activity) mContext).startActivityForResult(new Intent().setClass(mContext, LocationActivity.class),99);
+                Intent intent = new Intent();
+                intent.setClass(mContext,LocationActivity.class);
+                if(null != group){
+                    if(group.getLng() != 0){
+                        intent.putExtra("location",group.getLat()+","+group.getLng());
+                    }
+                }
+                ((Activity) mContext).startActivityForResult(intent,99);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -162,80 +226,6 @@ public class DialogInputController {
         });
     }
 
-
-    public void showEditGroupDilog1(final Group group){
-        AlertDialog.Builder builder = new AlertDialog.Builder((Activity)mContext);
-        view = View
-                .inflate((Activity)mContext, R.layout.dialog_road_input, null);
-
-        TextView tv_delect = view.findViewById(R.id.tv_delect);
-        final EditText edit_rode_name = view.findViewById(R.id.edit_rode_name);
-        final EditText edit_room_num = view.findViewById(R.id.edit_room_num);
-        final EditText edit_gps = view.findViewById(R.id.edit_gps);
-        Button btn_cancel = view.findViewById(R.id.btn_cancel);
-        Button btn_save = view.findViewById(R.id.btn_save);
-
-        builder.setView(view);
-        builder.setCancelable(false);
-
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-
-        if(group == null){
-            tv_delect.setVisibility(View.GONE);
-        }else {
-            tv_delect.setVisibility(View.VISIBLE);
-            edit_rode_name.setText(group.getGroupName());
-            edit_room_num.setText(group.getRoomNum()+"");
-            edit_gps.setText(group.getRemark());
-        }
-
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                hideSoftKeyboard((Activity)mContext);
-                dialog.dismiss();
-            }
-        });
-
-        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(TextUtils.isEmpty(edit_rode_name.getEditableText().toString())){
-                    Toast.makeText(mContext,"请输入街/路/巷信息",Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(edit_room_num.getEditableText().toString())){
-                    Toast.makeText(mContext,"请输入门牌号数量",Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(edit_gps.getEditableText().toString())){
-                    Toast.makeText(mContext,"请输入定位信息",Toast.LENGTH_LONG).show();
-                    return;
-                }
-//                hideSoftKeyboard((Activity)mContext);
-                dialog.dismiss();
-                Group group1 = new Group();
-                group1.setGroupName(edit_rode_name.getEditableText().toString());
-                group1.setRoomNum(Integer.parseInt(edit_room_num.getEditableText().toString()));
-                group1.setRemark(edit_gps.getEditableText().toString());
-                if(null != group){
-                    groupListener.updateItem(group1);
-                }else {
-                    groupListener.saveItem(group1);
-                }
-            }
-        });
-
-        tv_delect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                hideSoftKeyboard((Activity)mContext);
-                dialog.dismiss();
-                groupListener.delectItem();
-            }
-        });
-    }
 
     public void showEditRoomDilog(final Room room){
         AlertDialog.Builder builder = new AlertDialog.Builder((Activity)mContext);
@@ -263,7 +253,7 @@ public class DialogInputController {
 
         TextView tv_add_subitem = view.findViewById(R.id.tv_add_subitem);
         TextView tv_input_group = view.findViewById(R.id.tv_input_group);
-        EditText tv_input_door = view.findViewById(R.id.tv_input_door);
+        final EditText tv_input_door = view.findViewById(R.id.tv_input_door);
         final ImageView img_reserve = view.findViewById(R.id.img_reserve);
         final EditText edit_input_owner = view.findViewById(R.id.edit_input_owner);
         Button btn_cancel = view.findViewById(R.id.btn_cancel);
@@ -275,9 +265,19 @@ public class DialogInputController {
         final AlertDialog dialog = builder.create();
         dialog.show();
 
+        boolean isStreet = false;
+        if(room.getBelongGroup().contains("街") || room.getBelongGroup().contains("路")
+                || room.getBelongGroup().contains("巷") || room.getBelongGroup().contains("道")
+                || room.getBelongGroup().contains("里") || room.getBelongGroup().contains("堂")){
+            tv_input_door.setEnabled(true);
+            isStreet = true;
+        }else {
+            tv_input_door.setEnabled(false);
 
-        tv_input_group.setText(room.getBelongGroup());
+        }
         tv_input_door.setText(room.getRoomNo()+"");
+        tv_input_group.setText(room.getBelongGroup());
+
         edit_input_owner.setText(TextUtils.isEmpty(room.getOwnerName()) ? "" : room.getOwnerName());
         if(!TextUtils.isEmpty(room.getRemark())){
             String remark = room.getRemark();
@@ -300,6 +300,7 @@ public class DialogInputController {
             }
         });
 
+        final boolean finalIsStreet = isStreet;
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -307,7 +308,32 @@ public class DialogInputController {
                     Toast.makeText(mContext,"实体名称和预留信息不可同时为空",Toast.LENGTH_LONG).show();
                     return;
                 }
-
+                if(TextUtils.isEmpty(tv_input_door.getEditableText().toString())){
+                    Toast.makeText(mContext,"门牌号不能为空",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                boolean subRoomOk = true;
+                for(SubRoom subRoom : subRooms){
+                    if(TextUtils.isEmpty(subRoom.getOwnerName())){
+                        subRoomOk = false;
+                    }
+                }
+                if(!subRoomOk){
+                    Toast.makeText(mContext,"分支实体名称不能为空",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(finalIsStreet){
+                    int roomNum = 0;
+                    for(Room room1 : allRooms){
+                        if(String.valueOf(room1.getRoomNo()).equals(tv_input_door.getEditableText().toString())){
+                            roomNum++;
+                        }
+                    }
+                    if(roomNum>1){
+                        Toast.makeText(mContext,"输入门牌号有重复，请检查",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
                 hideSoftKeyboard((Activity)mContext);
                 dialog.dismiss();
                 if(TextUtils.isEmpty(edit_input_owner.getEditableText().toString())){
@@ -315,6 +341,7 @@ public class DialogInputController {
                 }else {
                     room.setOwnerName(edit_input_owner.getEditableText().toString());
                 }
+                room.setRoomNo(Integer.parseInt(tv_input_door.getEditableText().toString()));
                 room.setReserve(img_reserve.isSelected());
                 if(!subRooms.isEmpty()){
                     SubRoomList subRoomList = new SubRoomList();

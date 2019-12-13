@@ -5,6 +5,9 @@ buildscript {
         google()
         jcenter()
         maven{url "http://mvn.mob.com/android" }
+        maven {
+            url "http://artifactory.sf-express.com/artifactory/maven/"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
@@ -20,6 +23,9 @@ allprojects {
         jcenter()
         maven {
             url 'https://www.jitpack.io'
+        }
+        maven {
+            url "http://artifactory.sf-express.com/artifactory/maven/"
         }
     }
 }

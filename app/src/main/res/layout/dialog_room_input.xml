@@ -31,7 +31,7 @@
         android:id="@+id/tv_alarm_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="队/组"
+        android:text="队/组/路"
         app:layout_constraintBottom_toBottomOf="@+id/tv_input_group"
         app:layout_constraintStart_toStartOf="@+id/tv_phone_num4"
         app:layout_constraintTop_toTopOf="@+id/tv_input_group" />
@@ -67,7 +67,7 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/edit_background"
         android:ems="10"
-        android:hint="请输入队/组"
+        android:hint="请输入队/组/路"
         android:padding="8dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/edit_input_owner"
@@ -113,7 +113,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:padding="4dp"
-        android:src="@drawable/select_checkbox_select"
+        android:src="@drawable/select_check_select"
         app:layout_constraintStart_toStartOf="@+id/edit_input_owner"
         app:layout_constraintTop_toBottomOf="@+id/edit_input_owner" />
     

@@ -21,8 +21,8 @@ android {
         applicationId "com.ch.cs_collectiontool"
         minSdkVersion 24
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 7
+        versionName "1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -84,4 +84,5 @@ dependencies {
 
     implementation files('libs/sfmap-mapsdk-V1.0-20191127.aar')
     implementation files('libs/sfmap-locsdk-V1.0-20191127.aar')
+    implementation 'com.sf.andlibrary:sf-appupdater-sdk:2.0.0'
 }

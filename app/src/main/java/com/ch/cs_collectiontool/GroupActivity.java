@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.ch.cs_collectiontool.bean.Group;
 import com.ch.cs_collectiontool.bean.RequestResult;
 import com.ch.cs_collectiontool.bean.User;
+import com.ch.cs_collectiontool.util.SFUpdaterUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.gyf.barlibrary.ImmersionBar;
@@ -75,7 +76,7 @@ public class GroupActivity extends AppCompatActivity {
         mImmersionBar.init();
 
         initView();
-
+        SFUpdaterUtils.checkVersion(this);
 //        initData();
     }
 
@@ -98,6 +99,7 @@ public class GroupActivity extends AppCompatActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
         dialogInputController = new DialogInputController(GroupActivity.this);
         dialogInputController.showEditGroupDilog(groups.get(position));
+        dialogInputController.setAllGroups(groups);
         dialogInputController.setGroupListener(new DialogInputController.DialogGroupListener() {
             @Override
             public void saveItem(Group group) {
@@ -122,6 +124,9 @@ public class GroupActivity extends AppCompatActivity {
     private void initView() {
         recyclerUser.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
+        if(null == mApplication.collectInfo.getVillage()){
+            return;
+        }
         tvUser.setText(mApplication.collectInfo.getVillage().getUserName());
         tvRegion.setText(mApplication.collectInfo.getVillage().getCounty());
         tvAddress.setText(mApplication.collectInfo.getVillage().getAddress());
@@ -167,6 +172,7 @@ public class GroupActivity extends AppCompatActivity {
             case R.id.btn_add_one:
                 dialogInputController = new DialogInputController(GroupActivity.this);
                 dialogInputController.showEditGroupDilog(null);
+                dialogInputController.setAllGroups(groups);
                 dialogInputController.setGroupListener(new DialogInputController.DialogGroupListener() {
                     @Override
                     public void saveItem(Group group) {

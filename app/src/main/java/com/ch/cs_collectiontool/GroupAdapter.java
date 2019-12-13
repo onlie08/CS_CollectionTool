@@ -27,12 +27,17 @@ public class GroupAdapter extends BaseQuickAdapter<Group, BaseViewHolder> {
         helper.setText(R.id.tv_group_num,item.getRoomNum()+"");
         TextView tv_info = helper.getView(R.id.tv_info);
         tv_info.setText(checkProgress(item));
-//        tv_info.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
-//        tv_info.getPaint().setAntiAlias(true);//抗锯齿
+        tv_info.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+        tv_info.getPaint().setAntiAlias(true);//抗锯齿/
 
         tv_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(null != item.getRooms()){
+                    for(Room room : item.getRooms()){
+                        room.setBelongGroup(item.getGroupName());
+                    }
+                }
                 Intent intent = new Intent();
                 intent.putExtra("group",item);
                 intent.setClass(context, RoomActivity.class);
@@ -43,6 +48,9 @@ public class GroupAdapter extends BaseQuickAdapter<Group, BaseViewHolder> {
 
     private String checkProgress(Group item){
         int undone = 0 ;
+        if((boolean)AppPreferences.instance().get(String.valueOf(item.getId()),false)){
+            return "已提交(" + item.getRoomNum() + "/" + item.getRoomNum() + ")";
+        }
         if(null == item.getRooms() || item.getRooms().size() == 0){
             return "未填写("+undone+"/"+item.getRoomNum()+")";
         }else {

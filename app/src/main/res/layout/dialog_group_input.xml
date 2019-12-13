@@ -12,7 +12,7 @@
         android:id="@+id/tv_alarm_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="队/组"
+        android:text="队/组/路"
         app:layout_constraintBottom_toBottomOf="@+id/edit_input_group"
         app:layout_constraintStart_toStartOf="@+id/tv_phone_num4"
         app:layout_constraintTop_toTopOf="@+id/edit_input_group" />
@@ -50,7 +50,7 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/edit_background"
         android:ems="10"
-        android:hint="编辑队/组"
+        android:hint="编辑队/组/路"
         android:padding="8dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/edit_input_plate"

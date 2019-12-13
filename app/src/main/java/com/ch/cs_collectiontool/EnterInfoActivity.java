@@ -79,6 +79,12 @@ public class EnterInfoActivity extends AppCompatActivity {
             return;
         }
         editPhone.setText(mApplication.collectInfo.getUser().getTelephone());
+        if(null != mApplication.collectInfo.getVillage()){
+            editName.setText(mApplication.collectInfo.getVillage().getUserName());
+            editPhone.setText(mApplication.collectInfo.getVillage().getTelephone());
+            tvAddress.setText(mApplication.collectInfo.getVillage().getAddress());
+        }
+
     }
 
     private void initView() {

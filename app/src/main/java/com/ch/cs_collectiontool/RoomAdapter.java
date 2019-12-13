@@ -17,7 +17,7 @@ public class RoomAdapter extends BaseQuickAdapter<Room, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, Room item) {
         helper.setText(R.id.tv_group,item.getBelongGroup());
-        helper.setText(R.id.tv_family_num, item.getRoomNo()+"");
+
         helper.setText(R.id.tv_family_owner,TextUtils.isEmpty(item.getOwnerName()) ? "" : item.getOwnerName());
         ImageView img_checkin = helper.getView(R.id.img_checkin);
         if(item.isReserve()){
@@ -25,6 +25,15 @@ public class RoomAdapter extends BaseQuickAdapter<Room, BaseViewHolder> {
         }else {
             img_checkin.setSelected(false);
         }
+        helper.setText(R.id.tv_family_num, item.getRoomNo()+"");
+
+//        if(item.getBelongGroup().contains("街") || item.getBelongGroup().contains("路")
+//                || item.getBelongGroup().contains("巷") || item.getBelongGroup().contains("道")
+//                || item.getBelongGroup().contains("里") || item.getBelongGroup().contains("堂")){
+//            helper.setText(R.id.tv_family_num, item.getRoomNo()+"");
+//        }else {
+//            helper.setText(R.id.tv_family_num, item.getRoomNo()+"");
+//        }
     }
 
 }

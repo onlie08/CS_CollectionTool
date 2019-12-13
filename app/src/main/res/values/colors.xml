@@ -9,4 +9,5 @@
     <color name="textBlack">#000000</color>
     <!-- 分隔线   抽屉文字 导航街道名 -->
     <color name="divider">#d2d2d2</color>
+    <color name="transparent">#00000000</color>
 </resources>

@@ -25,6 +25,7 @@ import com.ch.cs_collectiontool.bean.CollectInfo;
 import com.ch.cs_collectiontool.bean.ErrorBean;
 import com.ch.cs_collectiontool.bean.RequestResult;
 import com.ch.cs_collectiontool.bean.User;
+import com.ch.cs_collectiontool.util.SFUpdaterUtils;
 import com.google.gson.Gson;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -98,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initData() {
+
         String collectInfo = (String) AppPreferences.instance().get("telephone", "");
         if (TextUtils.isEmpty(collectInfo)) {
             status = 0;
@@ -379,7 +381,7 @@ public class LoginActivity extends AppCompatActivity {
                 status = 3;
             }
         }
-        status = 2;
+//        status = 2;
         switch (status){
             case 1:
                 startActivity(new Intent(getApplicationContext(), EnterInfoActivity.class));
