@@ -109,7 +109,7 @@ public class EnterInfoActivity extends AppCompatActivity {
                 break;
             case R.id.tv_save:
                 if (checkInputLegal()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EnterInfoActivity.this);
                     View alarm = getLayoutInflater().inflate(R.layout.dialog_alarm_layout,null);
                     builder.setView(alarm);
                     builder.setCancelable(true);
@@ -150,9 +150,10 @@ public class EnterInfoActivity extends AppCompatActivity {
     private void saveVillage() {
         String telephone = (String) AppPreferences.instance().get("telephone", "");
         final Village village = new Village();
-        village.setTelephone(telephone);
+//        village.setTelephone(telephone);
         village.setUid(mApplication.collectInfo.getUser().getId());
         village.setUserName(editName.getText().toString());
+        village.setTelephone(editPhone.getText().toString().trim());
         village.setCounty(tvRegion.getText().toString());
         village.setVillage(tvRegion.getText().toString());
         village.setAddress(tvAddress.getText().toString());

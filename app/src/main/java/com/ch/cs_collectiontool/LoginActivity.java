@@ -374,6 +374,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void gotoActivity(CollectInfo collectInfo){
+        if(null == collectInfo || null == collectInfo.getUser()){
+            return;
+        }
         status = 1;
         if (collectInfo.getVillage() != null) {
             status = 2;
