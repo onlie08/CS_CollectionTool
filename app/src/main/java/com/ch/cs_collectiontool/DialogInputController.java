@@ -113,10 +113,10 @@ public class DialogInputController {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(edit_input_group.getEditableText().toString())){
-                    Toast.makeText(mContext,"请输入队/组信息",Toast.LENGTH_LONG).show();
-                    return;
-                }
+//                if(TextUtils.isEmpty(edit_input_group.getEditableText().toString())){
+//                    Toast.makeText(mContext,"请输入队/组信息",Toast.LENGTH_LONG).show();
+//                    return;
+//                }
                 if(TextUtils.isEmpty(edit_input_plate.getEditableText().toString())){
                     Toast.makeText(mContext,"请输入门牌号数量",Toast.LENGTH_LONG).show();
                     return;
@@ -239,9 +239,6 @@ public class DialogInputController {
             @Override
             public void delete() {
                 subRooms.remove(subRooms.size()-1);
-                if(subRooms.size()>0){
-                    subRooms.get(subRooms.size()-1).setEnableDelete(true);
-                }
                 subItemController.fillData(subRooms);
             }
 
@@ -279,10 +276,8 @@ public class DialogInputController {
         tv_input_group.setText(room.getBelongGroup());
 
         edit_input_owner.setText(TextUtils.isEmpty(room.getOwnerName()) ? "" : room.getOwnerName());
-        if(!TextUtils.isEmpty(room.getRemark())){
-            String remark = room.getRemark();
-            SubRoomList subRoomList = new Gson().fromJson(remark,SubRoomList.class);
-            subRooms = subRoomList.getSubRooms();
+        if(null != room.getSubRooms()){
+            subRooms = room.getSubRooms();
             subItemController.fillData(subRooms);
         }
 
@@ -344,9 +339,7 @@ public class DialogInputController {
                 room.setRoomNo(Integer.parseInt(tv_input_door.getEditableText().toString()));
                 room.setReserve(img_reserve.isSelected());
                 if(!subRooms.isEmpty()){
-                    SubRoomList subRoomList = new SubRoomList();
-                    subRoomList.setSubRooms(subRooms);
-                    room.setRemark(new Gson().toJson(subRoomList));
+                    room.setSubRooms(subRooms);
                 }
 
                 roomListener.saveItem(room);
@@ -366,20 +359,12 @@ public class DialogInputController {
             @Override
             public void onClick(View v) {
                 SubRoom subRoom = new SubRoom();
-                clearSubRoomsStatue();
                 subRoom.setRoomNo(room.getRoomNo()+"-"+(subRooms.size()+1));
-                subRoom.setEnableDelete(true);
                 subRooms.add(subRoom);
                 subItemController.fillData(subRooms);
             }
         });
 
-    }
-
-    private void clearSubRoomsStatue() {
-        for (int i=0;i<subRooms.size();i++){
-            subRooms.get(i).setEnableDelete(false);
-        }
     }
 
     /**
@@ -389,18 +374,6 @@ public class DialogInputController {
         InputMethodManager imm = (InputMethodManager)activity.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    class SubRoomList{
-        private List<SubRoom> subRooms;
-
-        public List<SubRoom> getSubRooms() {
-            return subRooms;
-        }
-
-        public void setSubRooms(List<SubRoom> subRooms) {
-            this.subRooms = subRooms;
-        }
     }
 
 }

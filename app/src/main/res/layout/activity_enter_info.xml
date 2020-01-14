@@ -82,7 +82,7 @@
             android:background="@drawable/edit_background"
             android:drawableRight="@mipmap/chevron_down"
             android:padding="8dp"
-            android:text="长沙市 望城区"
+            android:text="望城区"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_name" />

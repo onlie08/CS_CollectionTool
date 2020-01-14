@@ -3,6 +3,7 @@ package com.ch.cs_collectiontool.adapter;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 public class SubRoomAdapter extends BaseQuickAdapter<SubRoom, BaseViewHolder> {
+    private List<SubRoom> data;
 
     public interface OnDeleteListener{
         void delete();
@@ -30,6 +32,7 @@ public class SubRoomAdapter extends BaseQuickAdapter<SubRoom, BaseViewHolder> {
 
     public SubRoomAdapter(List<SubRoom> data) {
         super(R.layout.list_subitem_item, data);
+        this.data = data;
     }
     @Override
     protected void convert(final BaseViewHolder helper, final SubRoom item) {
@@ -53,7 +56,10 @@ public class SubRoomAdapter extends BaseQuickAdapter<SubRoom, BaseViewHolder> {
         });
         edit_sub_owner_name.setText(item.getOwnerName());
         final ImageView img_delete= helper.getView(R.id.img_delete);
-        if(item.isEnableDelete()){
+        int pos = getParentPosition(item);
+        Log.i("caohai","pos:"+pos);
+
+        if(data.get(data.size()-1) == item){
             img_delete.setVisibility(View.VISIBLE);
         }else {
             img_delete.setVisibility(View.GONE);

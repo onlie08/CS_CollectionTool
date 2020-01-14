@@ -1,11 +1,12 @@
 package com.ch.cs_collectiontool.bean;
 
+import java.io.Serializable;
 import java.util.PropertyResourceBundle;
 
-public class SubRoom {
+public class SubRoom implements Serializable {
     private String roomNo;
     private String ownerName;
-    private boolean enableDelete = false;
+//    private boolean enableDelete = false;
 
     public String getRoomNo() {
         return roomNo;
@@ -23,11 +24,11 @@ public class SubRoom {
         this.ownerName = ownerName;
     }
 
-    public boolean isEnableDelete() {
-        return enableDelete;
-    }
-
-    public void setEnableDelete(boolean enableDelete) {
-        this.enableDelete = enableDelete;
-    }
+//    public boolean isEnableDelete() {
+//        return enableDelete;
+//    }
+//
+//    public void setEnableDelete(boolean enableDelete) {
+//        this.enableDelete = enableDelete;
+//    }
 }

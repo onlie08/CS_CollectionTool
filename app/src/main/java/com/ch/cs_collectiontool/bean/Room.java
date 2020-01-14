@@ -1,6 +1,9 @@
 package com.ch.cs_collectiontool.bean;
 
+import com.sfmap.api.maps.model.LatLng;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class Room implements Serializable {
     private int roomNo;
@@ -9,6 +12,7 @@ public class Room implements Serializable {
     private int gid;
     private String belongGroup;
     private boolean reserve;
+    private List<SubRoom> subRooms;
 
     public int getRoomNo() {
         return roomNo;
@@ -56,5 +60,13 @@ public class Room implements Serializable {
 
     public void setReserve(boolean reserve) {
         this.reserve = reserve;
+    }
+
+    public List<SubRoom> getSubRooms() {
+        return subRooms;
+    }
+
+    public void setSubRooms(List<SubRoom> subRooms) {
+        this.subRooms = subRooms;
     }
 }

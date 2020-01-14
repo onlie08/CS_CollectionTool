@@ -28,4 +28,8 @@ public interface ApiService {
     @POST("getInfo")
     Observable<RequestResult> getInfo(@Body RequestBody body);
 
+
+    @POST("submitGroup")
+    Observable<RequestResult> submitGroup(@Body RequestBody body);
+
 }

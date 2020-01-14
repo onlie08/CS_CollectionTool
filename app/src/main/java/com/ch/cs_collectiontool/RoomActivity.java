@@ -174,6 +174,7 @@ public class RoomActivity extends AppCompatActivity {
                             allRooms.get(i).setOwnerName(room.getOwnerName());
                             allRooms.get(i).setRemark(room.getRemark());
                             allRooms.get(i).setReserve(room.isReserve());
+                            allRooms.get(i).setSubRooms(room.getSubRooms());
                         }
                     }
                 }
@@ -260,10 +261,11 @@ public class RoomActivity extends AppCompatActivity {
                     btn_report.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getApplicationContext(), "提交成功", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getApplicationContext(), "提交成功", Toast.LENGTH_LONG).show();
                             AppPreferences.instance().put(String.valueOf(editGroup.getId()), true);
                             roomLock = true;
                             setReportVisible();
+                            submitGroup();
                             dialog.dismiss();
                         }
                     });
@@ -387,6 +389,50 @@ public class RoomActivity extends AppCompatActivity {
     }
 
 
+    private void submitGroup() {
+        RequestId requestId = new RequestId();
+        requestId.setId(editGroup.getId());
+        String requestString = new Gson().toJson(requestId);
+        Log.i("caohai", requestString);
+        RequestBody requestBody = FormBody.create(MediaType.parse("application/json"), requestString);
+
+        RetrofitUtil.getInstance().getApiService()
+                .submitGroup(requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<RequestResult>() {
+                    private Disposable mDisposable;
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(RequestResult value) {
+                        if (value.getCode() != 0) {
+                            Toast.makeText(RoomActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+//                            Log.i("caohai", new Gson().toJson(value));
+                            Toast.makeText(RoomActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
+//                            roomAdapter.notifyDataSetChanged();
+                        }
+                        mDisposable.dispose();//注销
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mDisposable.dispose();//注销
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
     private boolean checkInputLegal() {
         for(Room room : allRooms){
             if(TextUtils.isEmpty(room.getOwnerName()) && !room.isReserve()){
@@ -394,5 +440,17 @@ public class RoomActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    class RequestId{
+        private int id;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
     }
 }

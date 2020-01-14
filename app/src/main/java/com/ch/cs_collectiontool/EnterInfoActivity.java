@@ -15,7 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ch.cs_collectiontool.bean.CsvJsonBean;
+import com.ch.cs_collectiontool.bean.Region;
 import com.ch.cs_collectiontool.bean.RequestResult;
+import com.ch.cs_collectiontool.bean.Street;
 import com.ch.cs_collectiontool.bean.User;
 import com.ch.cs_collectiontool.bean.Village;
 import com.ch.cs_collectiontool.view.SpinnerController;
@@ -54,6 +57,8 @@ public class EnterInfoActivity extends AppCompatActivity {
 
     ImmersionBar mImmersionBar;
     private String TAG = EnterInfoActivity.class.getSimpleName();
+    private int selectPos = 0;
+    private CsvJsonBean csvJsonBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,7 @@ public class EnterInfoActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        csvJsonBean = ConfigerHelper.getInstance(this).getCsvJsonBean();
         if (null == mApplication.collectInfo) {
             return;
         }
@@ -82,6 +88,7 @@ public class EnterInfoActivity extends AppCompatActivity {
         if(null != mApplication.collectInfo.getVillage()){
             editName.setText(mApplication.collectInfo.getVillage().getUserName());
             editPhone.setText(mApplication.collectInfo.getVillage().getTelephone());
+            tvRegion.setText(mApplication.collectInfo.getVillage().getCounty());
             tvAddress.setText(mApplication.collectInfo.getVillage().getAddress());
         }
 
@@ -97,13 +104,37 @@ public class EnterInfoActivity extends AppCompatActivity {
             case R.id.tv_close:
                 finish();
                 break;
-            case R.id.tv_address:
-                SpinnerController spinnerController = new SpinnerController(EnterInfoActivity.this);
-                spinnerController.showSpinnerDialog(ConfigerHelper.getInstance(this).villages);
-                spinnerController.setListener(new SpinnerController.SpinnerListener() {
+            case R.id.tv_region:
+                final List<String> regions = getRegions(csvJsonBean.getRegions());
+                SpinnerController spinnerRegion = new SpinnerController(EnterInfoActivity.this);
+                spinnerRegion.showSpinnerDialog(regions);
+                spinnerRegion.setListener(new SpinnerController.SpinnerListener() {
                     @Override
                     public void selectResult(String date) {
-                        tvAddress.setText(date);
+                        selectPos = regions.indexOf(date);
+                        tvRegion.setText(date);
+                        tvAddress.setText("");
+
+                    }
+                });
+                break;
+            case R.id.tv_address:
+                final List<String> streets = getStreets(csvJsonBean.getRegions().get(selectPos).getStreets());
+                SpinnerController spinnerStreets = new SpinnerController(EnterInfoActivity.this);
+                spinnerStreets.showSpinnerDialog(streets);
+                spinnerStreets.setListener(new SpinnerController.SpinnerListener() {
+                    @Override
+                    public void selectResult(final String date) {
+                        int pos = streets.indexOf(date);
+                        final List<String> villages = getVillages(csvJsonBean.getRegions().get(selectPos).getStreets().get(pos));
+                        SpinnerController spinnerVillages = new SpinnerController(EnterInfoActivity.this);
+                        spinnerVillages.showSpinnerDialog(villages);
+                        spinnerVillages.setListener(new SpinnerController.SpinnerListener() {
+                            @Override
+                            public void selectResult(String date1) {
+                                tvAddress.setText(date +" "+ date1);
+                            }
+                        });
                     }
                 });
                 break;
@@ -138,9 +169,32 @@ public class EnterInfoActivity extends AppCompatActivity {
                 }
 
                 break;
-            case R.id.tv_region:
-                break;
         }
+    }
+
+    private List<String> getVillages(Street street) {
+        List<String> results = new ArrayList<>();
+        String strings[] = street.getVillages().split(",");
+        for (int i=0;i<strings.length;i++){
+            results.add(strings[i]);
+        }
+        return results;
+    }
+
+    private List<String> getStreets(List<Street> streets) {
+        List<String> results = new ArrayList<>();
+        for (Street street : streets){
+            results.add(street.getStreetName());
+        }
+        return results;
+    }
+
+    private List<String> getRegions(List<Region> regions) {
+        List<String> results = new ArrayList<>();
+        for(Region region : regions){
+            results.add(region.getRegionName());
+        }
+        return results;
     }
 
     private boolean checkInputLegal() {
@@ -148,15 +202,18 @@ public class EnterInfoActivity extends AppCompatActivity {
     }
 
     private void saveVillage() {
-        String telephone = (String) AppPreferences.instance().get("telephone", "");
         final Village village = new Village();
-//        village.setTelephone(telephone);
         village.setUid(mApplication.collectInfo.getUser().getId());
         village.setUserName(editName.getText().toString());
         village.setTelephone(editPhone.getText().toString().trim());
+        village.setProvince("湖南省");
+        village.setCity("长沙市");
         village.setCounty(tvRegion.getText().toString());
-        village.setVillage(tvRegion.getText().toString());
-        village.setAddress(tvAddress.getText().toString());
+        String add = tvAddress.getText().toString();
+        String adds[] = add.split("\\s+");
+        village.setTown(adds[0]);
+        village.setVillage(adds[1]);
+        village.setAddress(add);
         RequestBody requestBody = FormBody.create(MediaType.parse("application/json"), new Gson().toJson(village));
 
         RetrofitUtil.getInstance().getApiService()
