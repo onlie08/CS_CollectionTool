@@ -1,7 +1,11 @@
 package com.ch.cs_collectiontool;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,6 +59,8 @@ public class GroupActivity extends AppCompatActivity {
     Button btnAddOne;
     @BindView(R.id.btn_add_road)
     Button btnAddRoad;
+
+    private String TAG = GroupActivity.class.getSimpleName();
 
     List<Group> groups = new ArrayList<>();
     private DialogInputController dialogInputController;
@@ -131,7 +137,8 @@ public class GroupActivity extends AppCompatActivity {
         tvRegion.setText(mApplication.collectInfo.getVillage().getCounty());
         tvAddress.setText(mApplication.collectInfo.getVillage().getAddress());
         tvPhoneNum.setText(mApplication.collectInfo.getVillage().getTelephone());
-        tvSave.setVisibility(View.GONE);
+        tvSave.setVisibility(View.VISIBLE);
+        tvSave.setText("注销登录");
     }
 
     @OnClick({R.id.tv_close, R.id.tv_save, R.id.btn_add_one,R.id.btn_add_road})
@@ -141,11 +148,40 @@ public class GroupActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_save:
-                if (groups.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "请填写信息后提交", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                saveVillage();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                View alarm = getLayoutInflater().inflate(R.layout.dialog_alarm_layout,null);
+                builder.setView(alarm);
+                builder.setCancelable(true);
+
+                final Dialog dialog1 = builder.create();
+                dialog1.show();
+
+                TextView tv_alarm_info = alarm.findViewById(R.id.tv_alarm_info);
+                tv_alarm_info.setText("是否确认注销当前账号？");
+                Button btn_report = alarm.findViewById(R.id.btn_report);
+                btn_report.setText("确认");
+                btn_report.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog1.dismiss();
+                        AppPreferences.instance().put("telephone","");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                System.exit(0);
+                            }
+                        },500);
+//
+//                        finish();
+                    }
+                });
+                Button btn_cancel = alarm.findViewById(R.id.btn_cancel);
+                btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog1.dismiss();
+                    }
+                });
                 break;
             case R.id.btn_add_road:
 //                dialogInputController1 = new DialogInputController(GroupActivity.this);
@@ -220,7 +256,7 @@ public class GroupActivity extends AppCompatActivity {
                         if (value.getCode() != 0) {
                             Toast.makeText(GroupActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                         } else {
-                            Log.i("caohai", new Gson().toJson(value));
+                            Log.i(TAG +"caohai", new Gson().toJson(value));
                             mApplication.collectInfo = value.getResult();
                             initData();
 //                            startActivity(new Intent(getApplicationContext(), RoomActivity.class));
@@ -266,7 +302,7 @@ public class GroupActivity extends AppCompatActivity {
                         if (value.getCode() != 0) {
                             Toast.makeText(GroupActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                         } else {
-                            Log.i("caohai", new Gson().toJson(value));
+                            Log.i(TAG +"caohai", new Gson().toJson(value));
                             getInfo();
                         }
                         mDisposable.dispose();//注销
@@ -356,7 +392,7 @@ public class GroupActivity extends AppCompatActivity {
                     public void onNext(RequestResult value) {
                         Toast.makeText(GroupActivity.this, value.getMessage(), Toast.LENGTH_SHORT).show();
                         if (value.getCode() == 0) {
-                            Log.i("caohai", new Gson().toJson(value));
+                            Log.i(TAG +"caohai", new Gson().toJson(value));
                             getInfo();
                         }
                         mDisposable.dispose();//注销
