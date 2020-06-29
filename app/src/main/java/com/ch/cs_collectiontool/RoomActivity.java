@@ -347,7 +347,7 @@ public class RoomActivity extends AppCompatActivity {
     }
 
 
-    private void saveRoomInfo(Room room) {
+    private void saveRoomInfo(final Room room) {
         String requestString = new Gson().toJson(room);
         Log.i("caohai", requestString);
         RequestBody requestBody = FormBody.create(MediaType.parse("application/json"), requestString);
@@ -379,6 +379,7 @@ public class RoomActivity extends AppCompatActivity {
                     @Override
                     public void onError(Throwable e) {
                         mDisposable.dispose();//注销
+                        Toast.makeText(getApplicationContext(),"网络问题，数据提交失败，请检查网络后重新编辑！",Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -423,6 +424,7 @@ public class RoomActivity extends AppCompatActivity {
                     @Override
                     public void onError(Throwable e) {
                         mDisposable.dispose();//注销
+                        Toast.makeText(getApplicationContext(),"网络问题，数据提交失败，请检查网络后重新编辑！",Toast.LENGTH_LONG).show();
                     }
 
                     @Override

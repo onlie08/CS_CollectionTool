@@ -129,16 +129,16 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.btn_login:
-//                requesetLogin();
-                if (TextUtils.isEmpty(editPhone.getEditableText().toString())) {
-                    Toast.makeText(getApplicationContext(), "请输入手机号", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(editSms.getEditableText().toString())) {
-                    Toast.makeText(getApplicationContext(), "请输入验证码", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                SMSSDK.submitVerificationCode("86", editPhone.getEditableText().toString(), editSms.getEditableText().toString());
+                requesetLogin();
+//                if (TextUtils.isEmpty(editPhone.getEditableText().toString())) {
+//                    Toast.makeText(getApplicationContext(), "请输入手机号", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//                if (TextUtils.isEmpty(editSms.getEditableText().toString())) {
+//                    Toast.makeText(getApplicationContext(), "请输入验证码", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//                SMSSDK.submitVerificationCode("86", editPhone.getEditableText().toString(), editSms.getEditableText().toString());
                 break;
         }
     }

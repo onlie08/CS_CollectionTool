@@ -21,8 +21,8 @@ android {
         applicationId "com.ch.cs_collectiontool"
         minSdkVersion 24
         targetSdkVersion 24
-        versionCode 16
-        versionName "1.16"
+        versionCode 22
+        versionName "1.22"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
